@@ -1,6 +1,7 @@
 package org.example.expert.domain.manager.controller;
 
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.config.JwtUtil;
@@ -38,12 +39,13 @@ public class ManagerController {
 
     @DeleteMapping("/todos/{todoId}/managers/{managerId}")
     public void deleteManager(
-            @RequestHeader("Authorization") String bearerToken,
             @PathVariable long todoId,
-            @PathVariable long managerId
+            @PathVariable long managerId,
+            HttpServletRequest request
     ) {
-        Claims claims = jwtUtil.extractClaims(bearerToken.substring(7));
-        long userId = Long.parseLong(claims.getSubject());
+//        Claims claims = jwtUtil.extractClaims(bearerToken.substring(7));
+//        long userId = Long.parseLong(claims.getSubject());
+        Long userId = (Long) request.getAttribute("userId");
         managerService.deleteManager(userId, todoId, managerId);
     }
 }

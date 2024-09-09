@@ -25,6 +25,17 @@ public class UserService {
 
     @Transactional
     public void changePassword(long userId, UserChangePasswordRequest userChangePasswordRequest) {
+
+        validateUserPassword(userId, userChangePasswordRequest);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new InvalidRequestException("User not found"));
+
+        user.changePassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
+
+        userRepository.save(user);
+    }
+
+    public void validateUserPassword(long userId, UserChangePasswordRequest userChangePasswordRequest) {
         if (userChangePasswordRequest.getNewPassword().length() < 8 ||
                 !userChangePasswordRequest.getNewPassword().matches(".*\\d.*") ||
                 !userChangePasswordRequest.getNewPassword().matches(".*[A-Z].*")) {
@@ -41,7 +52,6 @@ public class UserService {
         if (!passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), user.getPassword())) {
             throw new InvalidRequestException("잘못된 비밀번호입니다.");
         }
-
-        user.changePassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
     }
+
 }
