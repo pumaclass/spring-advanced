@@ -1,6 +1,7 @@
 package org.example.expert.config;
 
 import lombok.RequiredArgsConstructor;
+import org.example.expert.aop.AspectConfig;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,5 +19,10 @@ public class FilterConfig {
         registrationBean.addUrlPatterns("/*"); // 필터를 적용할 URL 패턴을 지정합니다.
 
         return registrationBean;
+    }
+
+    @Bean
+    public AspectConfig aspect(){
+        return new AspectConfig();
     }
 }
