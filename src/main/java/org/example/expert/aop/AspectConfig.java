@@ -17,22 +17,19 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AspectConfig {
     @Pointcut("execution(public * org.example.expert.domain.comment.controller.CommentAdminController.deleteComment(..))")
-    private void deleteComment() {}
+    private void deleteCommentSubTest() {}
 
     @Pointcut("execution(public * org.example.expert.domain.user.controller.UserAdminController.changeUserRole(..))")
     private void changeUserRole() {}
 
-    @Pointcut("deleteComment() || changeUserRole())")
-    private void selectController() {}
-
-    @Around("selectController()")
-    public Object deleteComment(ProceedingJoinPoint joinPoint) throws Throwable{
+    @Around("deleteCommentSubTest() || changeUserRole()")
+    public Object deleteCommentTest(ProceedingJoinPoint joinPoint) throws Throwable{
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String requestUri = request.getRequestURI();
         Long userId = (Long) request.getAttribute("userId");
         String time = LocalDateTime.now().toString();
         try{
-            log.info("BEFORE : " + "로깅 시간 : " + time + " URI : " + requestUri + " 유저ID : " + userId);
+            log.info("BEFORE : " + "로깅 시간 : " + time + ", URI : " + requestUri + ", 유저ID : " + userId);
             Object result = joinPoint.proceed();
             return result;
         }catch (Exception e){
