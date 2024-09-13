@@ -8,7 +8,6 @@ import org.example.expert.domain.comment.entity.Comment;
 import org.example.expert.domain.comment.repository.CommentRepository;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
-import org.example.expert.domain.common.exception.ServerException;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.entity.User;
@@ -21,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -89,14 +87,14 @@ class CommentServiceTest {
         long userId = 2L;
         long todoId = 1L;
         User user = new User("email", "12321", UserRole.USER);
-        ReflectionTestUtils.setField(user,"id", userId);
+        ReflectionTestUtils.setField(user, "id", userId);
         given(weatherClient.getTodayWeather()).willReturn("icy");
         Todo todo = new Todo("title", "contents", weatherClient.getTodayWeather(), user);
         ReflectionTestUtils.setField(todo, "id", todoId);
         Comment comment1 = new Comment("contents", user, todo);
-        ReflectionTestUtils.setField(comment1,"id", 1L);
+        ReflectionTestUtils.setField(comment1, "id", 1L);
         Comment comment2 = new Comment("contents2", user, todo);
-        ReflectionTestUtils.setField(comment2,"id", 2L);
+        ReflectionTestUtils.setField(comment2, "id", 2L);
         List<Comment> comments = Arrays.asList(comment1, comment2);
 
         given(commentRepository.findByTodoIdWithUser(anyLong())).willReturn(comments);
